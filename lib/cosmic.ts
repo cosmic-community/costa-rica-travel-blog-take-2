@@ -54,10 +54,17 @@ export async function getPost(slug: string): Promise<Post | null> {
 // Fetch posts by category
 export async function getPostsByCategory(categorySlug: string): Promise<Post[]> {
   try {
+    // First get the category to find its ID
+    const category = await getCategory(categorySlug)
+    if (!category) {
+      return []
+    }
+
+    // Then query posts by category ID
     const response = await cosmic.objects
       .find({ 
         type: 'posts',
-        'metadata.category.slug': categorySlug 
+        'metadata.category': category.id 
       })
       .props(['id', 'title', 'slug', 'metadata'])
       .depth(1)
@@ -74,10 +81,17 @@ export async function getPostsByCategory(categorySlug: string): Promise<Post[]> 
 // Fetch posts by author
 export async function getPostsByAuthor(authorSlug: string): Promise<Post[]> {
   try {
+    // First get the author to find its ID
+    const author = await getAuthor(authorSlug)
+    if (!author) {
+      return []
+    }
+
+    // Then query posts by author ID
     const response = await cosmic.objects
       .find({ 
         type: 'posts',
-        'metadata.author.slug': authorSlug 
+        'metadata.author': author.id 
       })
       .props(['id', 'title', 'slug', 'metadata'])
       .depth(1)
