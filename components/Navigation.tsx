@@ -32,6 +32,10 @@ export default function Navigation({ categories }: NavigationProps) {
             </Link>
           )
         })}
+        
+        <Link href="/contact" className="text-gray-700 hover:text-primary font-medium">
+          Contact
+        </Link>
       </div>
 
       {/* Mobile Menu Button */}
@@ -75,6 +79,14 @@ export default function Navigation({ categories }: NavigationProps) {
                   </Link>
                 )
               })}
+              
+              <Link
+                href="/contact"
+                className="text-gray-700 hover:text-primary font-medium py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Contact
+              </Link>
             </div>
           </div>
         </div>
