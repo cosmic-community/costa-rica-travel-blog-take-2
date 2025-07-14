@@ -13,6 +13,8 @@ export default function FeaturedPosts({ posts }: FeaturedPostsProps) {
   const mainPost = posts[0]
   const sidePosts = posts.slice(1)
 
+  if (!mainPost) return null
+
   return (
     <section className="py-16 bg-gray-50">
       <div className="container-responsive">
