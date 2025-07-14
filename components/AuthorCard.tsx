@@ -36,7 +36,12 @@ export default function AuthorCard({ author }: AuthorCardProps) {
             </p>
           )}
           <div className="mt-3">
-            <SocialLinks author={author} />
+            <SocialLinks 
+              email={author.metadata.email}
+              website={author.metadata.website}
+              instagram={author.metadata.instagram}
+              twitter={author.metadata.twitter}
+            />
           </div>
         </div>
       </div>
