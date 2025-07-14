@@ -1,94 +1,81 @@
-import { format } from 'date-fns'
-import type { CategoryColor } from '@/types'
+import { type ClassValue, clsx } from 'clsx'
+import { twMerge } from 'tailwind-merge'
 
-export function formatDate(dateString: string): string {
-  return format(new Date(dateString), 'MMMM d, yyyy')
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
 }
 
-export function getReadingTime(text: string): number {
-  const wordsPerMinute = 200
-  const wordCount = text.trim().split(/\s+/).length
-  return Math.ceil(wordCount / wordsPerMinute)
-}
-
-export function getCategoryColor(categorySlug: string): CategoryColor {
-  const colorMap: Record<string, CategoryColor> = {
-    adventure: 'adventure',
-    beaches: 'beaches',
-    wildlife: 'wildlife',
-    culture: 'culture',
+export function formatDate(dateString: string | undefined | null): string {
+  if (!dateString) {
+    return 'Recently'
   }
   
-  return colorMap[categorySlug] || 'beaches'
-}
-
-export function getCategoryColorClass(categorySlug: string): string {
-  const colorMap: Record<string, string> = {
-    adventure: 'bg-adventure text-white',
-    beaches: 'bg-beaches text-white',
-    wildlife: 'bg-wildlife text-white',
-    culture: 'bg-culture text-white',
+  // Check if the date string is valid
+  const date = new Date(dateString)
+  
+  // Check if the date is valid
+  if (isNaN(date.getTime())) {
+    return 'Recently'
   }
   
-  return colorMap[categorySlug] || 'bg-beaches text-white'
-}
-
-export function getCategoryBorderClass(categorySlug: string): string {
-  const colorMap: Record<string, string> = {
-    adventure: 'border-adventure',
-    beaches: 'border-beaches',
-    wildlife: 'border-wildlife',
-    culture: 'border-culture',
+  try {
+    return new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }).format(date)
+  } catch (error) {
+    // Fallback if date formatting fails
+    return 'Recently'
   }
-  
-  return colorMap[categorySlug] || 'border-beaches'
 }
 
-export function truncateText(text: string, maxLength: number): string {
-  if (text.length <= maxLength) return text
-  return text.substring(0, maxLength).trim() + '...'
-}
-
-export function extractTags(tagsString: string): string[] {
-  if (!tagsString) return []
-  return tagsString.split(',').map(tag => tag.trim()).filter(Boolean)
-}
-
-export function getImageUrl(url: string, width: number, height: number): string {
-  if (!url) return ''
-  
-  const params = new URLSearchParams({
-    w: width.toString(),
-    h: height.toString(),
-    fit: 'crop',
-    auto: 'format,compress'
-  })
-  
-  return `${url}?${params.toString()}`
-}
-
-export function getOptimizedImageUrl(url: string, options: {
-  width?: number
-  height?: number
-  quality?: number
-  fit?: 'crop' | 'fill' | 'scale'
-} = {}): string {
-  if (!url) return ''
+export function getOptimizedImageUrl(
+  baseUrl: string,
+  options: {
+    width?: number
+    height?: number
+    quality?: number
+    format?: 'auto' | 'webp' | 'jpg' | 'png'
+    fit?: 'crop' | 'scale' | 'fill' | 'max'
+  } = {}
+): string {
+  if (!baseUrl) return ''
   
   const {
     width = 800,
     height = 600,
-    quality = 75,
+    quality = 80,
+    format = 'auto',
     fit = 'crop'
   } = options
   
   const params = new URLSearchParams({
     w: width.toString(),
     h: height.toString(),
-    fit,
-    auto: 'format,compress',
-    q: quality.toString()
+    q: quality.toString(),
+    auto: format === 'auto' ? 'format,compress' : format,
+    fit
   })
   
-  return `${url}?${params.toString()}`
+  return `${baseUrl}?${params.toString()}`
+}
+
+export function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_-]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
+export function truncate(text: string, length: number): string {
+  if (text.length <= length) return text
+  return text.slice(0, length) + '...'
+}
+
+export function getReadingTime(content: string): number {
+  const wordsPerMinute = 200
+  const words = content.split(/\s+/).length
+  return Math.ceil(words / wordsPerMinute)
 }

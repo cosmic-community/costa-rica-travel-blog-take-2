@@ -8,12 +8,15 @@ interface PostCardProps {
 }
 
 export default function PostCard({ post }: PostCardProps) {
+  // Safely get the date with fallback
+  const displayDate = formatDate(post.published_at || post.created_at)
+  
   return (
     <article className="group">
       <Link href={`/posts/${post.slug}`}>
         <div className="card h-full">
           <div className="relative aspect-video">
-            {post.metadata?.featured_image && (
+            {post.metadata?.featured_image?.imgix_url && (
               <img
                 src={getOptimizedImageUrl(post.metadata.featured_image.imgix_url, { width: 400, height: 300 })}
                 alt={post.metadata?.title || post.title}
@@ -37,7 +40,7 @@ export default function PostCard({ post }: PostCardProps) {
               </p>
             )}
             <div className="flex items-center gap-4 text-sm text-gray-500">
-              <span>{formatDate(post.published_at || post.created_at)}</span>
+              <span>{displayDate}</span>
               {post.metadata?.read_time && (
                 <span>{post.metadata.read_time} min read</span>
               )}

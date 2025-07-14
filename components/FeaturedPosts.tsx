@@ -28,7 +28,7 @@ export default function FeaturedPosts({ posts }: FeaturedPostsProps) {
             <Link href={`/posts/${mainPost.slug}`} className="group block">
               <div className="card h-full">
                 <div className="relative aspect-video">
-                  {mainPost.metadata?.featured_image && (
+                  {mainPost.metadata?.featured_image?.imgix_url && (
                     <img
                       src={getOptimizedImageUrl(mainPost.metadata.featured_image.imgix_url, { width: 800, height: 600 })}
                       alt={mainPost.metadata?.title || mainPost.title}
@@ -70,7 +70,7 @@ export default function FeaturedPosts({ posts }: FeaturedPostsProps) {
                   <div className="card">
                     <div className="flex gap-4">
                       <div className="flex-shrink-0">
-                        {post.metadata?.featured_image && (
+                        {post.metadata?.featured_image?.imgix_url && (
                           <img
                             src={getOptimizedImageUrl(post.metadata.featured_image.imgix_url, { width: 200, height: 150 })}
                             alt={post.metadata?.title || post.title}
