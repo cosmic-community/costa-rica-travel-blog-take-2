@@ -1,14 +1,11 @@
-import type { Author } from '@/types'
-
 interface SocialLinksProps {
-  author: Author
+  email?: string
+  website?: string
+  instagram?: string
+  twitter?: string
 }
 
-export default function SocialLinks({ author }: SocialLinksProps) {
-  if (!author.metadata) return null
-
-  const { website, instagram, twitter, email } = author.metadata
-
+export default function SocialLinks({ email, website, instagram, twitter }: SocialLinksProps) {
   return (
     <div className="flex items-center gap-4">
       {website && (

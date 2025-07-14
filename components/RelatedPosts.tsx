@@ -1,13 +1,22 @@
+import { getPosts } from '@/lib/cosmic'
 import PostCard from '@/components/PostCard'
 import type { Post } from '@/types'
 
 interface RelatedPostsProps {
-  posts: Post[]
+  categorySlug: string
   currentPostId: string
 }
 
-export default function RelatedPosts({ posts, currentPostId }: RelatedPostsProps) {
-  const relatedPosts = posts.filter(post => post.id !== currentPostId).slice(0, 3)
+export default async function RelatedPosts({ categorySlug, currentPostId }: RelatedPostsProps) {
+  const posts = await getPosts()
+  
+  // Filter posts by category and exclude current post
+  const relatedPosts = posts
+    .filter(post => 
+      post.metadata?.category?.slug === categorySlug && 
+      post.id !== currentPostId
+    )
+    .slice(0, 3)
   
   if (relatedPosts.length === 0) return null
 

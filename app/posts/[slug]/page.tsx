@@ -62,7 +62,7 @@ export default async function PostPage({ params }: PostPageProps) {
 
   const title = post.metadata?.title || post.title
   const excerpt = post.metadata?.excerpt
-  const content = post.metadata?.content
+  const content = post.metadata?.content || ''
   const featuredImage = post.metadata?.featured_image
   const author = post.metadata?.author
   const category = post.metadata?.category
@@ -114,7 +114,7 @@ export default async function PostPage({ params }: PostPageProps) {
           )}
 
           {/* Content */}
-          {content && <PostContent content={content} />}
+          <PostContent content={content} />
 
           {/* Related Posts */}
           {category && (

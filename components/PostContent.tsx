@@ -1,13 +1,10 @@
 import { marked } from 'marked'
-import type { Post } from '@/types'
 
 interface PostContentProps {
-  post: Post
+  content: string
 }
 
-export default function PostContent({ post }: PostContentProps) {
-  const content = post.metadata?.content || ''
-  
+export default function PostContent({ content }: PostContentProps) {
   if (!content) return null
 
   return (
