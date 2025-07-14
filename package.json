@@ -21,6 +21,7 @@
     "tailwind-merge": "^2.2.1"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.10",
     "@types/marked": "^6.0.0",
     "@types/node": "^20",
     "@types/react": "^18",
